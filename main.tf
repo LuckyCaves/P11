@@ -1,11 +1,12 @@
 module "db" {
-  source = "./modules/db"
-  account_id = var.account_id
+  source           = "./modules/db"
+  account_id       = var.account_id
   d1_database_name = var.d1_database_name
 }
 
 module "worker" {
-  source = "./modules/worker"
-  account_id = var.account_id
-  worker_name = var.worker_name
+  source         = "./modules/worker"
+  account_id     = var.account_id
+  worker_name    = var.worker_name
+  d1_database_id = module.db.database_id
 }
