@@ -9,7 +9,7 @@ resource "cloudflare_workers_script" "worker" {
     {
       name = "DB"
       type = "d1"
-      id   = var.db_database_id
+      id   = var.d1_database_id
     }
   ]
 }
