@@ -1,4 +1,4 @@
 output "worker_url" {
   description = "URL predeterminada del Worker en workers.dev"
-  value       = module.worker.worker_url
+  value       = data.cloudflare_worker.worker.subdomain.url
 }
