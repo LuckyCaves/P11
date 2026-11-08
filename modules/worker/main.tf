@@ -1,12 +1,26 @@
-module "d1" {
-    source = "./modules/db"
-    account_id = var.account_id
-    d1_database_name = var.d1_database_name
+resource "cloudflare_workers_script" "worker" {
+  account_id         = var.account_id
+  script_name        = var.worker_name
+  main_module        = "worker.js"
+  content            = file("${path.module}/worker.js")
+  compatibility_date = "2025-10-28"
+
+  bindings = [
+    {
+      name = "DB"
+      type = "d1"
+      id   = var.d1_database_id
+    }
+  ]
 }
 
-module "worker" {
-    source = "./modules/worker"
-    account_id = var.account_id
-    worker_name = var.worker_name
-    d1_database_id = module.d1.database_id
+resource "cloudflare_workers_script_subdomain" "worker" {
+  account_id  = var.account_id
+  script_name = cloudflare_workers_script.worker.script_name
+  enabled     = true
+}
+
+data "cloudflare_worker" "worker" {
+  account_id = var.account_id
+  worker_id  = cloudflare_workers_script.worker.id
 }
